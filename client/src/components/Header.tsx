@@ -11,7 +11,7 @@ export const Header = () => {
       <Link
         to={'/'}
         className={
-          'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white '
+          'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:scale-105 transition'
         }
       >
         <span
@@ -39,20 +39,32 @@ export const Header = () => {
           <FaMoon />
         </Button>
         <Link to={'/sign-in'}>
-          <Button gradientDuoTone={'greenToBlue'} outline>
+          <Button gradientDuoTone={'greenToBlue'} outline className={'transition'}>
             Sign in
           </Button>
         </Link>
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link active={path === '/'} as={'div'}>
+        <Navbar.Link
+          active={path === '/'}
+          as={'div'}
+          className={'hover:scale-105 transition'}
+        >
           <Link to={'/'}>Home</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === '/about'} as={'div'}>
+        <Navbar.Link
+          active={path === '/about'}
+          as={'div'}
+          className={'hover:scale-105 transition'}
+        >
           <Link to={'/about'}>About</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === '/projects'} as={'div'}>
+        <Navbar.Link
+          active={path === '/projects'}
+          as={'div'}
+          className={'hover:scale-105 transition'}
+        >
           <Link to={'/projects'}>Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>
