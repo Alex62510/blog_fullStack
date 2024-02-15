@@ -47,7 +47,7 @@ export const SignUp = () => {
             </Button>
           </form>
           <div className={'flex gap-2 mt-5 text-sm'}>
-            <span className={''}>Have an account?</span>
+            <span>Have an account?</span>
             <Link to={'/sign-in'} className={'text-blue-500'}>
               Sign In
             </Link>
