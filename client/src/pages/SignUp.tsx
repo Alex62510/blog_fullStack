@@ -1,8 +1,41 @@
 import { Link } from 'react-router-dom';
-import React from 'react';
-import { Button, Label, TextInput } from 'flowbite-react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { Alert, Button, Label, TextInput } from 'flowbite-react';
 
 export const SignUp = () => {
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState<string | boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      setError('Please fill out all fields');
+    }
+    try {
+      setError(false);
+      setLoading(true);
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.statusCode === true) {
+        setError(true);
+        setLoading(false);
+        return;
+      }
+      setLoading(false);
+    } catch (e) {
+      setError(true);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={'min-h-screen mt-20'}>
       <div
@@ -29,18 +62,33 @@ export const SignUp = () => {
           </p>
         </div>
         <div className={'flex-1'}>
-          <form className={'flex flex-col gap-4'}>
+          <form className={'flex flex-col gap-4'} onSubmit={handleSubmit}>
             <div>
               <Label value={'Your username'} />
-              <TextInput type={'text'} placeholder={'Username'} id={'username'} />
+              <TextInput
+                type={'text'}
+                placeholder={'Username'}
+                id={'username'}
+                onChange={handleChange}
+              />
             </div>
             <div>
               <Label value={'Your email'} />
-              <TextInput type={'text'} placeholder={'Email'} id={'email'} />
+              <TextInput
+                type={'email'}
+                placeholder={'Email'}
+                id={'email'}
+                onChange={handleChange}
+              />
             </div>
             <div>
               <Label value={'Your password'} />
-              <TextInput type={'text'} placeholder={'Password'} id={'password'} />
+              <TextInput
+                type={'password'}
+                placeholder={'Password'}
+                id={'password'}
+                onChange={handleChange}
+              />
             </div>
             <Button gradientDuoTone={'greenToBlue'} type={'submit'}>
               Sign up
@@ -52,6 +100,11 @@ export const SignUp = () => {
               Sign In
             </Link>
           </div>
+          {error && (
+            <Alert color={'failure'} className={'mt-5'}>
+              {error}
+            </Alert>
+          )}
         </div>
       </div>
     </div>
