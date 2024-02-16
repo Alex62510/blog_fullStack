@@ -2,8 +2,17 @@ import { Link } from 'react-router-dom';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Alert, Button, Label, TextInput } from 'flowbite-react';
 
+type FormType = {
+  username: string;
+  email: string;
+  password: string;
+};
 export const SignUp = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<FormType>({
+    username: '',
+    email: '',
+    password: '',
+  });
   const [error, setError] = useState<string | boolean>(false);
   const [loading, setLoading] = useState(false);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +75,7 @@ export const SignUp = () => {
             <div>
               <Label value={'Your username'} />
               <TextInput
+                className={'hover:shadow-lg'}
                 type={'text'}
                 placeholder={'Username'}
                 id={'username'}
@@ -75,6 +85,7 @@ export const SignUp = () => {
             <div>
               <Label value={'Your email'} />
               <TextInput
+                className={'hover:shadow-lg'}
                 type={'email'}
                 placeholder={'Email'}
                 id={'email'}
@@ -84,6 +95,7 @@ export const SignUp = () => {
             <div>
               <Label value={'Your password'} />
               <TextInput
+                className={'hover:shadow-lg'}
                 type={'password'}
                 placeholder={'Password'}
                 id={'password'}
@@ -91,12 +103,12 @@ export const SignUp = () => {
               />
             </div>
             <Button gradientDuoTone={'greenToBlue'} type={'submit'}>
-              Sign up
+              {loading ? 'Loading...' : 'Sign up'}
             </Button>
           </form>
           <div className={'flex gap-2 mt-5 text-sm'}>
             <span>Have an account?</span>
-            <Link to={'/sign-in'} className={'text-blue-500'}>
+            <Link to={'/sign-in'} className={'text-blue-500 hover:underline'}>
               Sign In
             </Link>
           </div>
