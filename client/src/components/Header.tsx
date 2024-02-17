@@ -11,7 +11,7 @@ export const Header = () => {
       <Link
         to={'/'}
         className={
-          'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:scale-105 transition'
+          'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:opacity-80 transition'
         }
       >
         <span
