@@ -1,11 +1,11 @@
 import React from 'react';
 import { Footer } from 'flowbite-react';
 import { Link } from 'react-router-dom';
-import { BsFacebook, BsInstagram, BsTwitter, BsGithub, BsDribbble } from 'react-icons/bs';
+import { BsFacebook, BsTelegram, BsLinkedin, BsGithub, BsDribbble } from 'react-icons/bs';
 
 export const FooterComp = () => {
   return (
-    <Footer container className="border border-t-8 border-teal-500">
+    <Footer container className="border  border-teal-500">
       <div className="w-full max-w-7xl mx-auto">
         <div className="grid w-full justify-between sm:flex md:grid-cols-1">
           <div className="mt-5">
@@ -25,7 +25,7 @@ export const FooterComp = () => {
               Blog
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
+          <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6 pl-5">
             <div>
               <Footer.Title title="About" />
               <Footer.LinkGroup col>
@@ -67,16 +67,29 @@ export const FooterComp = () => {
         <div className="w-full sm:flex sm:items-center sm:justify-between">
           <Footer.Copyright href="#" by="Alex's blog" year={new Date().getFullYear()} />
           <div className="flex gap-6 sm:mt-0 mt-4 sm:justify-center">
-            <Footer.Icon href="#" icon={BsFacebook} />
-            <Footer.Icon href="#" icon={BsInstagram} />
-            <Footer.Icon href="#" icon={BsTwitter} />
+            <Footer.Icon href="#" icon={BsFacebook} className={'hover:opacity-80'} />
+            <Footer.Icon
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://t.me/AliakseiOrlov"
+              icon={BsTelegram}
+              className={'hover:opacity-80'}
+            />
+            <Footer.Icon
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.linkedin.com/in/alex-orlov-8a2078287/"
+              icon={BsLinkedin}
+              className={'hover:opacity-80'}
+            />
             <Footer.Icon
               target="_blank"
               rel="noopener noreferrer"
               href="https://github.com/Alex62510"
               icon={BsGithub}
+              className={'hover:opacity-80'}
             />
-            <Footer.Icon href="#" icon={BsDribbble} />
+            <Footer.Icon href="#" icon={BsDribbble} className={'hover:opacity-80'} />
           </div>
         </div>
       </div>
