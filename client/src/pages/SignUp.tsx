@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Alert, Button, Label, TextInput } from 'flowbite-react';
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
 
 type FormType = {
   username: string;
@@ -15,6 +15,7 @@ export const SignUp = () => {
   });
   const [error, setError] = useState<string | boolean>(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -22,7 +23,7 @@ export const SignUp = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.username || !formData.email || !formData.password) {
-      setError('Please fill out all fields');
+      return setError('Please fill out all fields');
     }
     try {
       setError(false);
@@ -33,14 +34,17 @@ export const SignUp = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.statusCode === true) {
-        setError(true);
+      if (data.success === false) {
+        setError(data.message);
         setLoading(false);
         return;
       }
       setLoading(false);
+      if (res.ok) {
+        navigate('/sign-in');
+      }
     } catch (e) {
-      setError(true);
+      setError((e as Error).message);
       setLoading(false);
     }
   };
@@ -102,8 +106,15 @@ export const SignUp = () => {
                 onChange={handleChange}
               />
             </div>
-            <Button gradientDuoTone={'greenToBlue'} type={'submit'}>
-              {loading ? 'Loading...' : 'Sign up'}
+            <Button gradientDuoTone={'greenToBlue'} type={'submit'} disabled={loading}>
+              {loading ? (
+                <>
+                  <Spinner size={'sm'} />
+                  <span className={'pl-3'}>Loading...</span>
+                </>
+              ) : (
+                'Sign up'
+              )}
             </Button>
           </form>
           <div className={'flex gap-2 mt-5 text-sm'}>
