@@ -1,6 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store';
+import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice';
 
 type FormType = {
   email: string;
@@ -11,9 +14,11 @@ export const SignIn = () => {
     email: '',
     password: '',
   });
-  const [error, setError] = useState<string | boolean>(false);
-  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+  const { error, loading } = useSelector((state: RootState) => state.user);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -21,11 +26,10 @@ export const SignIn = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      return setError('Please fill out all fields');
+      return dispatch(signInFailure('Please fill out all fields'));
     }
     try {
-      setError(false);
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,17 +37,14 @@ export const SignIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        setError(data.message);
-        setLoading(false);
-        return;
+        dispatch(signInFailure(data.message));
       }
-      setLoading(false);
       if (res.ok) {
+        dispatch(signInSuccess(data));
         navigate('/');
       }
     } catch (e) {
-      setError((e as Error).message);
-      setLoading(false);
+      dispatch(signInFailure((e as Error).message));
     }
   };
 
@@ -113,7 +114,11 @@ export const SignIn = () => {
           </div>
           {error && (
             <Alert color={'failure'} className={'mt-5'}>
-              {error}
+              {typeof error === 'string'
+                ? error
+                : typeof error === 'object' && error
+                  ? error.message || 'Something went wrong'
+                  : ''}
             </Alert>
           )}
         </div>
