@@ -3,9 +3,13 @@ import { Button, Navbar, TextInput } from 'flowbite-react';
 import { Link, useLocation } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon } from 'react-icons/fa';
+import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
+import { Profile } from './Profile';
 
 export const Header = () => {
   const path = useLocation().pathname;
+  const { error, currentUser } = useSelector((state: RootState) => state.user);
   return (
     <Navbar className={'border-b-2'}>
       <Link
@@ -39,9 +43,13 @@ export const Header = () => {
           <FaMoon />
         </Button>
         <Link to={'/sign-in'}>
-          <Button gradientDuoTone={'greenToBlue'} outline className={'transition'}>
-            Sign in
-          </Button>
+          {currentUser ? (
+            <Profile />
+          ) : (
+            <Button gradientDuoTone={'greenToBlue'} outline className={'transition'}>
+              Sign in
+            </Button>
+          )}
         </Link>
         <Navbar.Toggle />
       </div>
