@@ -16,15 +16,15 @@ export const Profile = () => {
           inline
         >
           <Dropdown.Header>
-            <span className={'block text-sm'}>@{currentUser.username}</span>
+            <span className={' block text-sm mb-1'}>@{currentUser.username}</span>
             <span className={'block text-sm font-medium truncate'}>
-              @{currentUser.email}
+              {currentUser.email}
             </span>
           </Dropdown.Header>
           <Link to={'/dashboard?tab=profile'}>
-            <Dropdown.Item>Profile</Dropdown.Item>
+            <Dropdown.Item className={'hover:animate-pulse'}>Profile</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item className={'hover:animate-pulse'}>Sign out</Dropdown.Item>
           </Link>
         </Dropdown>
       )}

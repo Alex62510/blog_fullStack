@@ -12,7 +12,7 @@ export const FooterComp = () => {
             <Link
               to={'/'}
               className={
-                'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:scale-105 transition hover:opacity-80'
+                'hover:animate-pulse self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:scale-105 transition hover:opacity-80'
               }
             >
               <span

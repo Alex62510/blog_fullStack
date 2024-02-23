@@ -18,12 +18,12 @@ export const Header = () => {
       <Link
         to={'/'}
         className={
-          'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:opacity-80 transition'
+          'hover:animate-pulse self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:opacity-80 transition'
         }
       >
         <span
           className={
-            'px-3 py-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-lime-500 rounded-lg text-white '
+            ' px-3 py-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-lime-500 rounded-lg text-white '
           }
         >
           OrlovAlex's
@@ -67,21 +67,21 @@ export const Header = () => {
         <Navbar.Link
           active={path === '/'}
           as={'div'}
-          className={'hover:scale-105 transition'}
+          className={'hover:scale-105 transition hover:animate-pulse'}
         >
           <Link to={'/'}>Home</Link>
         </Navbar.Link>
         <Navbar.Link
           active={path === '/about'}
           as={'div'}
-          className={'hover:scale-105 transition'}
+          className={'hover:scale-105 transition hover:animate-pulse'}
         >
           <Link to={'/about'}>About</Link>
         </Navbar.Link>
         <Navbar.Link
           active={path === '/projects'}
           as={'div'}
-          className={'hover:scale-105 transition'}
+          className={'hover:scale-105 transition hover:animate-pulse'}
         >
           <Link to={'/projects'}>Projects</Link>
         </Navbar.Link>
