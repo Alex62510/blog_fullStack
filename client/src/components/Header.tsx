@@ -2,25 +2,28 @@ import React from 'react';
 import { Button, Navbar, TextInput } from 'flowbite-react';
 import { Link, useLocation } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { FaMoon } from 'react-icons/fa';
-import { RootState } from '../redux/store';
-import { useSelector } from 'react-redux';
+import { FaMoon, FaSun } from 'react-icons/fa';
+import { AppDispatch, RootState } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { Profile } from './Profile';
+import { toggleTheme } from '../redux/theme/themeSlice';
 
 export const Header = () => {
   const path = useLocation().pathname;
-  const { error, currentUser } = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
+  const { theme } = useSelector((state: RootState) => state.theme);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   return (
     <Navbar className={'border-b-2'}>
       <Link
         to={'/'}
         className={
-          'self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:opacity-80 transition'
+          'hover:animate-pulse self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white hover:opacity-80 transition'
         }
       >
         <span
           className={
-            'px-3 py-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-lime-500 rounded-lg text-white '
+            ' px-3 py-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-lime-500 rounded-lg text-white '
           }
         >
           OrlovAlex's
@@ -39,39 +42,46 @@ export const Header = () => {
         <AiOutlineSearch />
       </Button>
       <div className={'flex gap-2 md:order-2'}>
-        <Button className={'w-12 h-10 hidden sm:inline'} color="green" pill>
-          <FaMoon />
+        <Button
+          className={'w-12 h-10 hidden sm:inline'}
+          color="green"
+          pill
+          onClick={() => dispatch(toggleTheme())}
+        >
+          {theme === 'light' ? <FaSun /> : <FaMoon />}
         </Button>
-        <Link to={'/sign-in'}>
-          {currentUser ? (
-            <Profile />
-          ) : (
+
+        {currentUser ? (
+          <Profile />
+        ) : (
+          <Link to={'/sign-in'}>
             <Button gradientDuoTone={'greenToBlue'} outline className={'transition'}>
               Sign in
             </Button>
-          )}
-        </Link>
+          </Link>
+        )}
+
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
         <Navbar.Link
           active={path === '/'}
           as={'div'}
-          className={'hover:scale-105 transition'}
+          className={'hover:scale-105 transition hover:animate-pulse'}
         >
           <Link to={'/'}>Home</Link>
         </Navbar.Link>
         <Navbar.Link
           active={path === '/about'}
           as={'div'}
-          className={'hover:scale-105 transition'}
+          className={'hover:scale-105 transition hover:animate-pulse'}
         >
           <Link to={'/about'}>About</Link>
         </Navbar.Link>
         <Navbar.Link
           active={path === '/projects'}
           as={'div'}
-          className={'hover:scale-105 transition'}
+          className={'hover:scale-105 transition hover:animate-pulse'}
         >
           <Link to={'/projects'}>Projects</Link>
         </Navbar.Link>

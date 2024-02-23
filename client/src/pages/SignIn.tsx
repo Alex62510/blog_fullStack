@@ -59,7 +59,9 @@ export const SignIn = () => {
         <div className={' flex flex-col flex-1 '}>
           <Link
             to={'/'}
-            className={'font-bold dark:text-white text-4xl hover:opacity-80 transition'}
+            className={
+              'hover:animate-pulse font-bold dark:text-white text-4xl hover:opacity-80 transition'
+            }
           >
             <span
               className={
