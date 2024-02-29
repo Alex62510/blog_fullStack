@@ -63,9 +63,9 @@ export const DashProfile = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          setFormData({ ...formData, profilePicture: downloadURL }),
-            setImageFileUrl(downloadURL),
-            setImageFileUploading(false);
+          setFormData({ ...formData, profilePicture: downloadURL });
+          setImageFileUrl(downloadURL);
+          setImageFileUploading(false);
         });
       },
     );
