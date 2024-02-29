@@ -1,11 +1,17 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store';
 import { Alert, Button, TextInput } from 'flowbite-react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { FormData } from '../types/types';
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from '../redux/user/userSlice';
 
 export const DashProfile = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -14,6 +20,11 @@ export const DashProfile = () => {
   const filePickerRef = useRef<HTMLInputElement>(null);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState<boolean | string>(false);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUserDataSuccess, setUpdateUserDataSuccess] = useState(false);
+  const [formData, setFormData] = useState<FormData | object>({});
+  const [updateUserError, setUpdateUserError] = useState('');
+  const dispatch: AppDispatch = useDispatch();
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -30,6 +41,7 @@ export const DashProfile = () => {
   }, [imageFile]);
 
   const uploadImage = async (imageFile: File) => {
+    setImageFileUploading(true);
     setImageError(false);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -47,21 +59,69 @@ export const DashProfile = () => {
         setImagePercent(0);
         setImageFileUrl(null);
         setImageFile(undefined);
+        setImageFileUploading(false);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL =>
-          setImageFileUrl(downloadURL),
-        );
+        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+          setFormData({ ...formData, profilePicture: downloadURL }),
+            setImageFileUrl(downloadURL),
+            setImageFileUploading(false);
+        });
       },
     );
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUpdateUserDataSuccess(false);
+    setUpdateUserError('');
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setUpdateUserError('');
+    setUpdateUserDataSuccess(false);
+    if (Object.keys(formData).length === 0) {
+      setUpdateUserError('No changes made');
+      return;
+    }
+
+    if (imageFileUploading) {
+      setUpdateUserError('Please waite uploading...');
+      return;
+    }
+    try {
+      dispatch(updateUserStart());
+      if (currentUser) {
+        const res = await fetch(`/api/user/update/${currentUser._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setUpdateUserError(data.message);
+          dispatch(updateUserFailure(data.message));
+        } else {
+          dispatch(updateUserSuccess(data));
+          setUpdateUserDataSuccess(true);
+        }
+      }
+    } catch (e) {
+      dispatch(updateUserFailure((e as Error).message));
+      setUpdateUserError((e as Error).message);
+    }
+  };
+
+  console.log();
   return (
     <div className={'max-w-lg mx-auto p-3 w-full'}>
       <h1 className={'my-7 text-center font-semibold text-3xl'}>Profile</h1>
       {currentUser && (
         <>
-          <form className={'flex flex-col gap-4'}>
+          <form className={'flex flex-col gap-4'} onSubmit={handleSubmit}>
             <input
               type={'file'}
               ref={filePickerRef}
@@ -106,14 +166,21 @@ export const DashProfile = () => {
               id={'username'}
               placeholder={'Username'}
               defaultValue={currentUser.username}
+              onChange={handleChange}
             />
             <TextInput
               type={'text'}
               id={'email'}
               placeholder={'Email'}
               defaultValue={currentUser.email}
+              onChange={handleChange}
             />
-            <TextInput type={'password'} id={'password'} placeholder={'password'} />
+            <TextInput
+              type={'password'}
+              id={'password'}
+              placeholder={'password'}
+              onChange={handleChange}
+            />
             <Button
               type={'submit'}
               gradientDuoTone={'greenToBlue'}
@@ -135,6 +202,16 @@ export const DashProfile = () => {
               Sign Out
             </span>
           </div>
+          {updateUserDataSuccess && (
+            <Alert color={'success'} className={'mt-5'}>
+              Update success!
+            </Alert>
+          )}
+          {updateUserError && (
+            <Alert color={'failure'} className={'mt-5'}>
+              {updateUserError}
+            </Alert>
+          )}
         </>
       )}
     </div>
