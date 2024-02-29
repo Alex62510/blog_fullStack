@@ -10,13 +10,13 @@ export const updateUser = async (req, res, next) => {
         return next(errorHandler(403, 'Your are not allowed to update this user!'))
     }
     if (req.body.password) {
-        if (req.body.password < 6) {
+        if (req.body.password.length < 5) {
             return next(errorHandler(400, 'Password must be more than 6 symbols'))
         }
         req.body.password = await bcryptjs.hashSync(req.body.password, 10)
     }
     if (req.body.username) {
-        if (req.body.username < 7 || req.body.username > 20) {
+        if (req.body.username.length < 4 || req.body.username.length > 20) {
             return next(errorHandler(400, 'Username must be between 7 and 20 symbols'))
         }
         if (req.body.username.includes(' ')) {
