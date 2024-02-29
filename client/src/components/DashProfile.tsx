@@ -14,7 +14,7 @@ import {
 } from '../redux/user/userSlice';
 
 export const DashProfile = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser, loading } = useSelector((state: RootState) => state.user);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageFileUrl, setImageFileUrl] = useState<null | string>(null);
   const filePickerRef = useRef<HTMLInputElement>(null);
@@ -186,8 +186,9 @@ export const DashProfile = () => {
               gradientDuoTone={'greenToBlue'}
               className={''}
               outline
+              disabled={imageFileUploading || loading}
             >
-              Update
+              {imageFileUploading || loading ? 'Updating...' : 'Update'}
             </Button>
           </form>
           <div className={'text-red-700 flex justify-between mt-5 mb-14'}>
