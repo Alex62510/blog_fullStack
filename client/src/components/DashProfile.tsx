@@ -43,6 +43,7 @@ export const DashProfile = () => {
   const uploadImage = async (imageFile: File) => {
     setImageFileUploading(true);
     setImageError(false);
+    setUpdateUserError('');
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
@@ -107,6 +108,7 @@ export const DashProfile = () => {
         } else {
           dispatch(updateUserSuccess(data));
           setUpdateUserDataSuccess(true);
+          setFormData({});
         }
       }
     } catch (e) {
@@ -115,7 +117,7 @@ export const DashProfile = () => {
     }
   };
 
-  console.log();
+  console.log(formData);
   return (
     <div className={'max-w-lg mx-auto p-3 w-full'}>
       <h1 className={'my-7 text-center font-semibold text-3xl'}>Profile</h1>
@@ -204,12 +206,22 @@ export const DashProfile = () => {
             </span>
           </div>
           {updateUserDataSuccess && (
-            <Alert color={'success'} className={'mt-5'}>
+            <Alert
+              color={'success'}
+              className={'mt-5'}
+              rounded
+              onDismiss={() => setUpdateUserDataSuccess(false)}
+            >
               Update success!
             </Alert>
           )}
           {updateUserError && (
-            <Alert color={'failure'} className={'mt-5'}>
+            <Alert
+              color={'failure'}
+              className={'mt-5'}
+              rounded
+              onDismiss={() => setUpdateUserError('')}
+            >
               {updateUserError}
             </Alert>
           )}
