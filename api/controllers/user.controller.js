@@ -56,9 +56,16 @@ export const deleteUser = async (req, res, next) => {
         return next(errorHandler(403, 'Your are not allowed to delete this account!'))
     }
     try {
-       await User.findByIdAndDelete(req.params.userId)
-        res.status(200).json('Use has been deleted');
+        await User.findByIdAndDelete(req.params.userId)
+        res.status(200).json('User has been deleted');
+    } catch (e) {
+        next(e)
+    }
+}
+export const signout = async (req, res, next) => {
+    try {
+       res.clearCookie('access_token').status(200).json('Use has been sign out');
     }catch (e) {
-      next(e)
+       next(e)
     }
 }

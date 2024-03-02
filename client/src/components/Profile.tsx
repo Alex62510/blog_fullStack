@@ -1,11 +1,28 @@
 import React from 'react';
 import { Avatar, Dropdown } from 'flowbite-react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store';
 import { Link } from 'react-router-dom';
+import { signOut } from '../redux/user/userSlice';
 
 export const Profile = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const dispatch: AppDispatch = useDispatch();
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/user/signout/', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOut());
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    }
+  };
 
   return (
     <>
@@ -24,7 +41,9 @@ export const Profile = () => {
           <Link to={'/dashboard?tab=profile'}>
             <Dropdown.Item className={'hover:animate-pulse'}>Profile</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item className={'hover:animate-pulse'}>Sign out</Dropdown.Item>
+            <Dropdown.Item className={'hover:animate-pulse'} onClick={handleSignout}>
+              Sign out
+            </Dropdown.Item>
           </Link>
         </Dropdown>
       )}
