@@ -137,7 +137,7 @@ export const DashProfile = () => {
                 'relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full'
               }
             >
-              {imagePercent > 0 && (
+              {imagePercent !== 100 && imagePercent > 0 && (
                 <CircularProgressbar
                   value={imagePercent || 0}
                   text={`${imagePercent}%`}
