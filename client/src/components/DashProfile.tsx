@@ -1,30 +1,45 @@
-import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { Alert, Button, TextInput } from 'flowbite-react';
+import { Alert, Button, Modal, ModalBody, ModalHeader, TextInput } from 'flowbite-react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import 'react-circular-progressbar/dist/styles.css';
 import { FormData } from '../types/types';
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signOut,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
 } from '../redux/user/userSlice';
+import e from 'express';
 
 export const DashProfile = () => {
-  const { currentUser, loading } = useSelector((state: RootState) => state.user);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageFileUrl, setImageFileUrl] = useState<null | string>(null);
-  const filePickerRef = useRef<HTMLInputElement>(null);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState<boolean | string>(false);
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUserDataSuccess, setUpdateUserDataSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState<FormData | object>({});
   const [updateUserError, setUpdateUserError] = useState('');
+
+  const { currentUser, loading, error } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
+  const filePickerRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -117,6 +132,42 @@ export const DashProfile = () => {
     }
   };
 
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      if (currentUser) {
+        const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+          method: 'DELETE',
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          dispatch(deleteUserFailure(data.message));
+        } else {
+          dispatch(deleteUserSuccess(data));
+        }
+      }
+    } catch (e) {
+      dispatch(deleteUserFailure((e as Error).message));
+    }
+  };
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/user/signout/', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOut());
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    }
+  };
+
   console.log(formData);
   return (
     <div className={'max-w-lg mx-auto p-3 w-full'}>
@@ -195,11 +246,13 @@ export const DashProfile = () => {
           </form>
           <div className={'text-red-700 flex justify-between mt-5 mb-14'}>
             <span
+              onClick={() => setShowModal(true)}
               className={'cursor-pointer hover:scale-105 transition hover:animate-pulse'}
             >
               Delete Account
             </span>
             <span
+              onClick={handleSignout}
               className={'cursor-pointer hover:scale-105 transition hover:animate-pulse'}
             >
               Sign Out
@@ -225,6 +278,49 @@ export const DashProfile = () => {
               {updateUserError}
             </Alert>
           )}
+          {error && (
+            <Alert
+              color={'failure'}
+              className={'mt-5'}
+              rounded
+              onDismiss={() => setUpdateUserError('')}
+            >
+              {error as ReactNode}
+            </Alert>
+          )}
+          <Modal
+            show={showModal}
+            onClose={() => setShowModal(false)}
+            popup
+            size={'md'}
+            position={'center'}
+          >
+            <ModalHeader color={'caretColor'} />
+            <ModalBody>
+              <div className={'text-center'}>
+                <HiOutlineExclamationCircle
+                  className={
+                    'h-16 w-16 text-lime-500 dark:text-gray-200  mt-4 mx-auto transition animate-bounce'
+                  }
+                />
+                <h3 className={'mb-6 text-lg text-gray-600'}>
+                  Are you sure you want to delete your account?
+                </h3>
+                <div className={'flex justify-center gap-10 '}>
+                  <Button gradientDuoTone={'pinkToOrange'} onClick={handleDeleteUser}>
+                    Yes I'm sure
+                  </Button>
+                  <Button
+                    outline
+                    gradientDuoTone={'tealToLime'}
+                    onClick={() => setShowModal(false)}
+                  >
+                    No, cancel
+                  </Button>
+                </div>
+              </div>
+            </ModalBody>
+          </Modal>
         </>
       )}
     </div>

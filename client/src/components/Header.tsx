@@ -13,6 +13,7 @@ export const Header = () => {
   const dispatch: AppDispatch = useDispatch();
   const { theme } = useSelector((state: RootState) => state.theme);
   const { currentUser } = useSelector((state: RootState) => state.user);
+
   return (
     <Navbar className={'border-b-2'}>
       <Link
