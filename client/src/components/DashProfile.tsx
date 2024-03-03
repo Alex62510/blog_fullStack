@@ -24,7 +24,7 @@ import {
   updateUserStart,
   updateUserSuccess,
 } from '../redux/user/userSlice';
-import e from 'express';
+import { Link } from 'react-router-dom';
 
 export const DashProfile = () => {
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
@@ -243,6 +243,17 @@ export const DashProfile = () => {
             >
               {imageFileUploading || loading ? 'Updating...' : 'Update'}
             </Button>
+            {currentUser.isAdmin && (
+              <Link to={'create-post'}>
+                <Button
+                  type={'button'}
+                  gradientDuoTone={'purpleToBlue'}
+                  className={'w-full'}
+                >
+                  Create a post
+                </Button>
+              </Link>
+            )}
           </form>
           <div className={'text-red-700 flex justify-between mt-5 mb-14'}>
             <span
