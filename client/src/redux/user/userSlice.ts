@@ -10,6 +10,7 @@ export type UserType = {
   profilePicture: string;
   createdAt: string;
   updatedAt: string;
+  isAdmin: boolean;
   __v: number;
 };
 type InitialStateType = {

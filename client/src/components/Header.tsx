@@ -42,7 +42,7 @@ export const Header = () => {
       <Button className={'w-12 h-10  lg:hidden'} color="green" pill>
         <AiOutlineSearch />
       </Button>
-      <div className={'flex gap-2 md:order-2'}>
+      <div className={'flex gap-2 md:order-2 '}>
         <Button
           className={'w-12 h-10 hidden sm:inline'}
           color="green"
