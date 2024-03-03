@@ -241,10 +241,10 @@ export const DashProfile = () => {
               outline
               disabled={imageFileUploading || loading}
             >
-              {imageFileUploading || loading ? 'Updating...' : 'Update'}
+              {imageFileUploading || loading ? 'Loading...' : 'Update'}
             </Button>
             {currentUser.isAdmin && (
-              <Link to={'create-post'}>
+              <Link to={'/create-post'}>
                 <Button
                   type={'button'}
                   gradientDuoTone={'purpleToBlue'}
