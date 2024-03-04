@@ -36,7 +36,7 @@ export const CreatePost = () => {
         <ReactQuill
           theme={'snow'}
           placeholder={'Write something...'}
-          className={'h-72 mb-12 dark:text-cyan-100'}
+          className={`h-72 mb-12 dark:text-cyan-100 dark:placeholder:text-cyan-100 `}
         />
         <Button type={'submit'} gradientDuoTone={'purpleToBlue'}>
           Publish
