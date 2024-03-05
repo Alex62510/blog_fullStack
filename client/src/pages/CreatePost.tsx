@@ -20,7 +20,11 @@ export const CreatePost = () => {
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
   const [imageUploadError, setImageUploadError] = useState('');
   const [publishError, setPublishError] = useState('');
-  const [formData, setFormData] = useState<FormDataType>({});
+  const [formData, setFormData] = useState<FormDataType>({
+    title: '',
+    content: '',
+    category: '',
+  });
   const navigate = useNavigate();
 
   const handleUploadImage = async () => {
@@ -101,7 +105,14 @@ export const CreatePost = () => {
             className={'flex-1'}
             onChange={e => setFormData({ ...formData, title: e.target.value })}
           />
-          <Select onChange={e => setFormData({ ...formData, category: e.target.value })}>
+          <Select
+            onChange={e =>
+              setFormData({
+                ...formData,
+                category: e.target.value,
+              })
+            }
+          >
             <option value={'uncategorized'}>Select a category</option>
             <option value={'typescript'}>typeScript</option>
             <option value={'reactjs'}>React.js</option>
