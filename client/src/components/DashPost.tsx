@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { Table } from 'flowbite-react';
+import { Button, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
-
-type PostType = {
-  category: string;
-  content: string;
-  createdAt: string;
-  image: string;
-  slug: string;
-  title: string;
-  updatedAt: string;
-  userId: string;
-  __v: string;
-  _id: string;
-};
+import { PostType } from '../types/types';
+import { HiOutlineArrowRight } from 'react-icons/hi';
 
 export const DashPost = () => {
   const { currentUser, loading, error } = useSelector((state: RootState) => state.user);
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
+  const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,6 +19,9 @@ export const DashPost = () => {
           const data = await res.json();
           if (res.ok) {
             setUserPosts(data.posts);
+            if (data.length < 9) {
+              setShowMore(false);
+            }
           }
         }
       } catch (e) {
@@ -40,7 +33,26 @@ export const DashPost = () => {
     }
   }, [currentUser?._id]);
 
-  console.log(userPosts);
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length;
+    try {
+      if (currentUser) {
+        const res = await fetch(
+          `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`,
+        );
+        const data = await res.json();
+        if (res.ok) {
+          setUserPosts(prev => [...prev, ...data.posts]);
+          if (data.posts.length < 9) {
+            setShowMore(false);
+          }
+        }
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    }
+  };
+
   return (
     <div
       className={
@@ -114,6 +126,21 @@ export const DashPost = () => {
               </Table.Body>
             ))}
           </Table>
+          {showMore && (
+            <div className={'py-7'}>
+              <Button
+                gradientDuoTone={'purpleToBlue'}
+                onClick={handleShowMore}
+                className={
+                  ' w-full self-center text-sm text-teal-950 bg-white hover:text-white hover:bg-white'
+                }
+                outline
+              >
+                <HiOutlineArrowRight className="h-5 w-5 rotate-90 font-teal-900 hover:text-white" />
+                <span className={'pl-4'}>Show more</span>
+              </Button>
+            </div>
+          )}
         </>
       ) : (
         <p>You have no posts yet!</p>
