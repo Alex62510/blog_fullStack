@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { Button, Table } from 'flowbite-react';
+import { Button, Modal, ModalBody, ModalHeader, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { PostType } from '../types/types';
-import { HiOutlineArrowRight } from 'react-icons/hi';
+import { HiOutlineArrowRight, HiOutlineExclamationCircle } from 'react-icons/hi';
 
 export const DashPost = () => {
   const { currentUser, loading, error } = useSelector((state: RootState) => state.user);
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
   const [showMore, setShowMore] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState('');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -50,6 +52,32 @@ export const DashPost = () => {
       }
     } catch (e) {
       console.log((e as Error).message);
+    }
+  };
+  const handleDeleteButton = (post: PostType) => {
+    setShowModal(true);
+    setPostIdToDelete(post._id);
+  };
+
+  const handleDeletePost = async () => {
+    setShowModal(false);
+    try {
+      if (currentUser) {
+        const res = await fetch(
+          `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
+          {
+            method: 'DELETE',
+          },
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+        } else {
+          setUserPosts(prev => prev.filter(post => post._id !== postIdToDelete));
+        }
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -105,6 +133,7 @@ export const DashPost = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <span
+                      onClick={() => handleDeleteButton(post)}
                       className={
                         'font-medium text-red-500 cursor-pointer hover:underline transition hover:text-red-900 hover:font-semibold'
                       }
@@ -145,6 +174,39 @@ export const DashPost = () => {
       ) : (
         <p>You have no posts yet!</p>
       )}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size={'md'}
+        position={'center'}
+      >
+        <ModalHeader color={'caretColor'} />
+        <ModalBody>
+          <div className={'text-center'}>
+            <HiOutlineExclamationCircle
+              className={
+                'h-16 w-16 text-lime-500 dark:text-gray-200  mt-4 mx-auto transition animate-bounce'
+              }
+            />
+            <h3 className={'mb-6 text-lg text-gray-600'}>
+              Are you sure you want to delete this post?
+            </h3>
+            <div className={'flex justify-center gap-10 '}>
+              <Button gradientDuoTone={'pinkToOrange'} onClick={handleDeletePost}>
+                Yes I'm sure
+              </Button>
+              <Button
+                outline
+                gradientDuoTone={'tealToLime'}
+                onClick={() => setShowModal(false)}
+              >
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };
