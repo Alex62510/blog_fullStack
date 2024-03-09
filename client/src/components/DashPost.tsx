@@ -4,10 +4,11 @@ import { RootState } from '../redux/store';
 import { Button, Modal, ModalBody, ModalHeader, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { PostType } from '../types/types';
-import { HiOutlineArrowRight, HiOutlineExclamationCircle } from 'react-icons/hi';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { MdOutlineExpandMore } from 'react-icons/md';
 
 export const DashPost = () => {
-  const { currentUser, loading, error } = useSelector((state: RootState) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -156,17 +157,16 @@ export const DashPost = () => {
             ))}
           </Table>
           {showMore && (
-            <div className={'py-7'}>
+            <div className={'py-2'}>
               <Button
-                gradientDuoTone={'purpleToBlue'}
+                gradientDuoTone={'greenToBlue'}
                 onClick={handleShowMore}
                 className={
                   ' w-full self-center text-sm text-teal-950 bg-white hover:text-white hover:bg-white'
                 }
                 outline
               >
-                <HiOutlineArrowRight className="h-5 w-5 rotate-90 font-teal-900 hover:text-white" />
-                <span className={'pl-4'}>Show more</span>
+                <MdOutlineExpandMore className={'w-5 h-5'} />
               </Button>
             </div>
           )}
