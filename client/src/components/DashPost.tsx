@@ -22,7 +22,7 @@ export const DashPost = () => {
           const data = await res.json();
           if (res.ok) {
             setUserPosts(data.posts);
-            if (data.length < 9) {
+            if (data.posts.length < 9) {
               setShowMore(false);
             }
           }
@@ -35,7 +35,7 @@ export const DashPost = () => {
       fetchPosts();
     }
   }, [currentUser?._id]);
-
+  console.log(showMore);
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
     try {
@@ -103,7 +103,7 @@ export const DashPost = () => {
               </Table.HeadCell>
             </Table.Head>
             {userPosts.map(post => (
-              <Table.Body className={'divide-y'}>
+              <Table.Body className={'divide-y'} key={post._id}>
                 <Table.Row
                   className={
                     'bg-white dark:border-gray-700 dark:bg-gray-800 hover:bg-neutral-200 hover:shadow-lg hover:animate-pulse'
