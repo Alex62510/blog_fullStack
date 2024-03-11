@@ -4,6 +4,7 @@ import { l } from 'vite/dist/node/types.d-jgA8ss1A';
 import { DashSidebar } from '../components/DashSidebar';
 import { DashProfile } from '../components/DashProfile';
 import { DashPost } from '../components/DashPost';
+import { DashUsers } from '../components/DashUsers';
 
 export const Dashboard = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ export const Dashboard = () => {
       </div>
       {tab === 'profile' && <DashProfile />}
       {tab === 'posts' && <DashPost />}
+      {tab === 'users' && <DashUsers />}
     </div>
   );
 };

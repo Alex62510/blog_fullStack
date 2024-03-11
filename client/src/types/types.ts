@@ -17,3 +17,13 @@ export type PostType = {
   __v: string;
   _id: string;
 };
+export type UserType = {
+  _id: string;
+  username: string;
+  email: string;
+  profilePicture: string;
+  isAdmin: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: string;
+};
