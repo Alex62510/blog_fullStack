@@ -52,7 +52,7 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-    if (req.user.id !== req.params.userId) {
+    if (!req.user.isAdmin && req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'Your are not allowed to delete this account!'))
     }
     try {
@@ -64,9 +64,9 @@ export const deleteUser = async (req, res, next) => {
 }
 export const signout = async (req, res, next) => {
     try {
-       res.clearCookie('access_token').status(200).json('Use has been sign out');
-    }catch (e) {
-       next(e)
+        res.clearCookie('access_token').status(200).json('Use has been sign out');
+    } catch (e) {
+        next(e)
     }
 }
 export const getUsers = async (req, res, next) => {
@@ -79,12 +79,12 @@ export const getUsers = async (req, res, next) => {
         const sortDirection = req.query.sort === 'asc' ? 1 : -1;
 
         const users = await User.find()
-            .sort({ createdAt: sortDirection })
+            .sort({createdAt: sortDirection})
             .skip(startIndex)
             .limit(limit);
 
         const usersWithoutPassword = users.map((user) => {
-            const { password, ...rest } = user._doc;
+            const {password, ...rest} = user._doc;
             return rest;
         });
 
@@ -98,7 +98,7 @@ export const getUsers = async (req, res, next) => {
             now.getDate()
         );
         const lastMonthUsers = await User.countDocuments({
-            createdAt: { $gte: oneMonthAgo },
+            createdAt: {$gte: oneMonthAgo},
         });
 
         res.status(200).json({
