@@ -58,21 +58,19 @@ export const DashUsers = () => {
     setUserIdToDelete(user._id);
   };
 
-  const handleDeletePost = async () => {
+  const handleDeleteUser = async () => {
     setShowModal(false);
     try {
       if (currentUser) {
-        const res = await fetch(
-          `/api/user/deleteuser/${userIdToDelete}/${currentUser._id}`,
-          {
-            method: 'DELETE',
-          },
-        );
+        const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+          method: 'DELETE',
+        });
         const data = await res.json();
         if (!res.ok) {
           console.log(data.message);
         } else {
           setUsers(prev => prev.filter(user => user._id !== userIdToDelete));
+          setShowModal(false);
         }
       }
     } catch (e) {
@@ -175,7 +173,7 @@ export const DashUsers = () => {
               Are you sure you want to delete this user?
             </h3>
             <div className={'flex justify-center gap-10 '}>
-              <Button gradientDuoTone={'pinkToOrange'} onClick={handleDeletePost}>
+              <Button gradientDuoTone={'pinkToOrange'} onClick={handleDeleteUser}>
                 Yes I'm sure
               </Button>
               <Button
