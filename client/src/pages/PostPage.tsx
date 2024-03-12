@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Spiner } from '../components/Spiner';
+import { PostType } from '../types/types';
 
 export const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState<PostType | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -31,9 +32,22 @@ export const PostPage = () => {
     };
     fetchPost();
   }, [postSlug]);
-  if (loading) {
-    return <Spiner />;
-  }
 
-  return <Spiner />;
+  if (loading)
+    return (
+      <div className={'flex justify-center items-center text-center min-h-screen'}>
+        <Spiner />
+      </div>
+    );
+  return (
+    <main className={'p-3 flex flex-col max-w-6xl mx-auto min-h-screen'}>
+      <h1
+        className={
+          'text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl dark:text-teal-100'
+        }
+      >
+        {post && post.title}
+      </h1>
+    </main>
+  );
 };
