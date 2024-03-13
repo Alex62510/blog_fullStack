@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Spiner } from '../components/Spiner';
 import { PostType } from '../types/types';
+import { Button } from 'flowbite-react';
 
 export const PostPage = () => {
   const { postSlug } = useParams();
@@ -48,6 +49,30 @@ export const PostPage = () => {
       >
         {post && post.title}
       </h1>
+      <Link to={`/search?category=${post?.category}`} className={'self-center mt-5'}>
+        <Button gradientDuoTone={'greenToBlue'} outline size={'xs'}>
+          <span>{post && post.category} </span>
+        </Button>
+      </Link>
+      <img
+        src={post?.image}
+        alt={post?.title}
+        className={'mt-10 p-3 max-h-[600px] w-full object-cover'}
+      />
+      <div
+        className={
+          'flex justify-between dark:text-teal-100 p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'
+        }
+      >
+        <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
+        <span>{post && (post.content.length / 1000).toFixed(0)} mins read</span>
+      </div>
+      {post && (
+        <div
+          className={'p-3 max-w-2xl mx-auto w-full post-content dark:text-teal-100'}
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        ></div>
+      )}
     </main>
   );
 };
