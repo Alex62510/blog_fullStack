@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Spiner } from '../components/Spiner';
 import { PostType } from '../types/types';
 import { Button } from 'flowbite-react';
+import { CallToAction } from '../components/CallToAction';
 
 export const PostPage = () => {
   const { postSlug } = useParams();
@@ -73,6 +74,9 @@ export const PostPage = () => {
           dangerouslySetInnerHTML={{ __html: post.content }}
         ></div>
       )}
+      <div className={'max-w-4xl mx-auto w-full dark:text-teal-100'}>
+        <CallToAction />
+      </div>
     </main>
   );
 };
