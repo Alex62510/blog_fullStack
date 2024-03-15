@@ -19,7 +19,7 @@ export const CallToAction = () => {
             target={'_blank'}
             rel={'noopener noreferrer'}
           >
-            Go to GitHub
+            Go to GitHub page
           </a>
         </Button>
       </div>

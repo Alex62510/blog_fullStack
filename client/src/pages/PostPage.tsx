@@ -79,6 +79,7 @@ export const PostPage = () => {
         <CallToAction />
       </div>
       {post && <CommentSection postId={post._id} />}
+      {error && 'Some error'}
     </main>
   );
 };
