@@ -27,3 +27,14 @@ export type UserType = {
   updatedAt: string;
   __v: string;
 };
+export type CommentType = {
+  content: string;
+  createdAt: string;
+  likes: number[];
+  numberOfLikes: number;
+  postId: string;
+  updatedAt: string;
+  userId: string;
+  _id: string;
+  __v: string;
+};
