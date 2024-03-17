@@ -1,8 +1,10 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { Link } from 'react-router-dom';
 import { Alert, Button, Textarea } from 'flowbite-react';
+import { Comment } from './Comment';
+import { CommentType } from '../types/types';
 
 type Props = {
   postId: string;
@@ -10,6 +12,7 @@ type Props = {
 export const CommentSection = ({ postId }: Props) => {
   const { currentUser } = useSelector((state: RootState) => state.user);
   const [comment, setComment] = useState('');
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [commentError, setCommentError] = useState('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -28,6 +31,7 @@ export const CommentSection = ({ postId }: Props) => {
         const data = await res.json();
         if (res.ok) {
           setComment('');
+          setComments([data, ...comments]);
           setCommentError('');
         }
       }
@@ -35,6 +39,21 @@ export const CommentSection = ({ postId }: Props) => {
       setCommentError((e as Error).message);
     }
   };
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const res = await fetch(`/api/comment/getPostComments/${postId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setComments(data);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getComments();
+  }, [postId]);
 
   return (
     <div className={'max-w-2xl mx-auto w-full p-3'}>
@@ -89,6 +108,21 @@ export const CommentSection = ({ postId }: Props) => {
             </Alert>
           )}
         </form>
+      )}
+      {comments.length === 0 ? (
+        <p className={'text-sm my-5'}>No comments yet!</p>
+      ) : (
+        <>
+          <div className={'text-sm my-5 flex items-center gap-1'}>
+            <p className={'dark:text-teal-100'}>Comments</p>
+            <div className={'border border-gray-400 py-1 px-2 rounded-md'}>
+              <p className={'dark:text-teal-100'}>{comments.length}</p>
+            </div>
+          </div>
+          {comments.map(comment => (
+            <Comment key={comment._id} comment={comment} />
+          ))}
+        </>
       )}
     </div>
   );
