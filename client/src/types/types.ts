@@ -30,7 +30,7 @@ export type UserType = {
 export type CommentType = {
   content: string;
   createdAt: string;
-  likes: number[];
+  likes: string[];
   numberOfLikes: number;
   postId: string;
   updatedAt: string;
