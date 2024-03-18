@@ -25,7 +25,7 @@ export type UserType = {
   isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
-  __v: string;
+  __v?: string;
 };
 export type CommentType = {
   content: string;

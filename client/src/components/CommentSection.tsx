@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Textarea } from 'flowbite-react';
 import { Comment } from './Comment';
 import { CommentType } from '../types/types';
@@ -14,6 +14,7 @@ export const CommentSection = ({ postId }: Props) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<CommentType[]>([]);
   const [commentError, setCommentError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,7 +27,11 @@ export const CommentSection = ({ postId }: Props) => {
         const res = await fetch('/api/comment/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: comment, postId, userId: currentUser._id }),
+          body: JSON.stringify({
+            content: comment,
+            postId,
+            userId: currentUser._id,
+          }),
         });
         const data = await res.json();
         if (res.ok) {
@@ -54,6 +59,34 @@ export const CommentSection = ({ postId }: Props) => {
     };
     getComments();
   }, [postId]);
+
+  const handleLike = async (commentId: string) => {
+    try {
+      if (!currentUser) {
+        navigate('/sign-in');
+        return;
+      }
+      const res = await fetch(`/api/comment/likeComments/${commentId}`, {
+        method: 'PUT',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(
+          comments.map(comment =>
+            commentId === comment._id
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment,
+          ),
+        );
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    }
+  };
 
   return (
     <div className={'max-w-2xl mx-auto w-full p-3'}>
@@ -120,7 +153,7 @@ export const CommentSection = ({ postId }: Props) => {
             </div>
           </div>
           {comments.map(comment => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment key={comment._id} comment={comment} onLike={handleLike} />
           ))}
         </>
       )}
