@@ -79,7 +79,7 @@ export const Comment = ({ comment, onLike, onEdit }: Props) => {
           <>
             {' '}
             <Textarea
-              className={'mb-2'}
+              className={'mb-2 dark:text-teal-100'}
               value={editedContent}
               onChange={e => setEditedContent(e.target.value)}
               rows={3}
