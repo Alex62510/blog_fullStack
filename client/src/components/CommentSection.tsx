@@ -87,6 +87,11 @@ export const CommentSection = ({ postId }: Props) => {
       console.log((e as Error).message);
     }
   };
+  const handleEdit = async (commentId: string, editedContent: string) => {
+    setComments(
+      comments.map(c => (c._id === commentId ? { ...c, content: editedContent } : c)),
+    );
+  };
 
   return (
     <div className={'max-w-2xl mx-auto w-full p-3'}>
@@ -153,7 +158,12 @@ export const CommentSection = ({ postId }: Props) => {
             </div>
           </div>
           {comments.map(comment => (
-            <Comment key={comment._id} comment={comment} onLike={handleLike} />
+            <Comment
+              key={comment._id}
+              comment={comment}
+              onLike={handleLike}
+              onEdit={handleEdit}
+            />
           ))}
         </>
       )}
