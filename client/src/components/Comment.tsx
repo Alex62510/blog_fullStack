@@ -10,8 +10,9 @@ type Props = {
   comment: CommentType;
   onLike: (commentId: string) => void;
   onEdit: (commentId: string, editContent: string) => void;
+  onDelete: (commentId: string) => void;
 };
-export const Comment = ({ comment, onLike, onEdit }: Props) => {
+export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   const [user, setUser] = useState<UserType | null>(null);
@@ -53,6 +54,10 @@ export const Comment = ({ comment, onLike, onEdit }: Props) => {
     } catch (e) {
       console.log((e as Error).message);
     }
+  };
+
+  const handleDelete = (commentId: string) => {
+    onDelete(comment._id);
   };
 
   return (
@@ -129,13 +134,22 @@ export const Comment = ({ comment, onLike, onEdit }: Props) => {
               </p>
               {currentUser &&
                 (currentUser._id === comment.userId || currentUser.isAdmin) && (
-                  <button
-                    onClick={handleEdit}
-                    type={'button'}
-                    className={'text-gray-400 hover:text-cyan-600 hover:underline'}
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      onClick={handleEdit}
+                      type={'button'}
+                      className={'text-gray-500 hover:text-cyan-600 hover:underline'}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      type={'button'}
+                      className={'text-gray-500 hover:text-red-500 hover:underline'}
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
             </div>
           </>
