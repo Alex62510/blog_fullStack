@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { Link, useNavigate } from 'react-router-dom';
@@ -38,6 +38,8 @@ export const CommentSection = ({ postId }: Props) => {
           setComment('');
           setComments([data, ...comments]);
           setCommentError('');
+        } else {
+          setCommentError(data.message);
         }
       }
     } catch (e) {
@@ -49,8 +51,8 @@ export const CommentSection = ({ postId }: Props) => {
     const getComments = async () => {
       try {
         const res = await fetch(`/api/comment/getPostComments/${postId}`);
+        const data = await res.json();
         if (res.ok) {
-          const data = await res.json();
           setComments(data);
         }
       } catch (e) {
@@ -92,6 +94,10 @@ export const CommentSection = ({ postId }: Props) => {
       comments.map(c => (c._id === commentId ? { ...c, content: editedContent } : c)),
     );
   };
+  const handleChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentError('');
+    setComment(e.target.value);
+  };
 
   return (
     <div className={'max-w-2xl mx-auto w-full p-3'}>
@@ -124,7 +130,7 @@ export const CommentSection = ({ postId }: Props) => {
             placeholder={'Add a comment...'}
             rows={3}
             maxLength={200}
-            onChange={e => setComment(e.target.value)}
+            onChange={handleChangeContent}
             value={comment}
           ></Textarea>
           <div className={'flex justify-between items-center mt-5'}>
