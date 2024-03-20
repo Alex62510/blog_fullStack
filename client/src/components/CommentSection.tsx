@@ -14,6 +14,7 @@ export const CommentSection = ({ postId }: Props) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<CommentType[]>([]);
   const [commentError, setCommentError] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -98,6 +99,11 @@ export const CommentSection = ({ postId }: Props) => {
     setCommentError('');
     setComment(e.target.value);
   };
+  const handleDelete = async (commentId: string) => {
+    try {
+      setShowModal(true);
+    } catch (e) {}
+  };
 
   return (
     <div className={'max-w-2xl mx-auto w-full p-3'}>
@@ -169,6 +175,7 @@ export const CommentSection = ({ postId }: Props) => {
               comment={comment}
               onLike={handleLike}
               onEdit={handleEdit}
+              onDelete={handleDelete}
             />
           ))}
         </>
