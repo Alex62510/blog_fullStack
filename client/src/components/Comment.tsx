@@ -182,14 +182,16 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
                     <h3 className={'mb-6 text-lg text-gray-600'}>
                       Are you sure you want to delete this comment?
                     </h3>
-                    <div className={'flex justify-center gap-10 '}>
+                    <div className={'flex justify-center gap-10  '}>
                       <Button
+                        className={'hover:animate-pulse transition'}
                         gradientDuoTone={'pinkToOrange'}
                         onClick={() => handleDelete(comment._id)}
                       >
                         Yes I'm sure
                       </Button>
                       <Button
+                        className={'hover:animate-pulse transition'}
                         outline
                         gradientDuoTone={'tealToLime'}
                         onClick={() => setShowModal(false)}
