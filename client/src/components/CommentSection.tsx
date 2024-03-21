@@ -160,7 +160,7 @@ export const CommentSection = ({ postId }: Props) => {
               {200 - comment.length} characters remaining
             </p>
             <Button
-              className={''}
+              className={'hover:animate-pulse transition'}
               type={'submit'}
               gradientDuoTone={'purpleToBlue'}
               outline
