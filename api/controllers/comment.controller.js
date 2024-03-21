@@ -62,6 +62,9 @@ export const editComments = async (req, res, next) => {
         if (comment.userId !== req.user.id && req.user.isAdmin === false) {
             return next(errorHandler(404, 'You are not allowed to edit this comment!'))
         }
+        if(!req.body.content){
+            return next(errorHandler(404, 'You have to write content'))
+        }
         const editedComment=await Comment.findByIdAndUpdate(req.params.commentId,{
             content: req.body.content,
         },{new:true})

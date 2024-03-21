@@ -4,7 +4,8 @@ import moment from 'moment';
 import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { Button, Textarea } from 'flowbite-react';
+import { Alert, Button, Modal, ModalBody, ModalHeader, Textarea } from 'flowbite-react';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 type Props = {
   comment: CommentType;
@@ -18,6 +19,8 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
+  const [commentError, setCommentError] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -47,9 +50,13 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
           content: editedContent,
         }),
       });
+      const data = await res.json();
       if (res.ok) {
         setIsEdit(false);
         onEdit(comment._id, editedContent);
+        setCommentError('');
+      } else {
+        setCommentError(data.message);
       }
     } catch (e) {
       console.log((e as Error).message);
@@ -57,7 +64,8 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
   };
 
   const handleDelete = (commentId: string) => {
-    onDelete(comment._id);
+    onDelete(commentId);
+    setShowModal(false);
   };
 
   return (
@@ -110,6 +118,11 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
                 Cancel
               </Button>
             </div>
+            {commentError && (
+              <Alert color={'failure'} className={'mt-5'}>
+                {commentError && commentError}
+              </Alert>
+            )}
           </>
         ) : (
           <>
@@ -143,7 +156,7 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
                       Edit
                     </button>
                     <button
-                      onClick={handleDelete}
+                      onClick={() => setShowModal(true)}
                       type={'button'}
                       className={'text-gray-500 hover:text-red-500 hover:underline'}
                     >
@@ -151,6 +164,42 @@ export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
                     </button>
                   </>
                 )}
+              <Modal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                popup
+                size={'md'}
+                position={'center'}
+              >
+                <ModalHeader color={'caretColor'} />
+                <ModalBody>
+                  <div className={'text-center'}>
+                    <HiOutlineExclamationCircle
+                      className={
+                        'h-16 w-16 text-lime-500 dark:text-gray-200  mt-4 mx-auto transition animate-bounce'
+                      }
+                    />
+                    <h3 className={'mb-6 text-lg text-gray-600'}>
+                      Are you sure you want to delete this comment?
+                    </h3>
+                    <div className={'flex justify-center gap-10 '}>
+                      <Button
+                        gradientDuoTone={'pinkToOrange'}
+                        onClick={() => handleDelete(comment._id)}
+                      >
+                        Yes I'm sure
+                      </Button>
+                      <Button
+                        outline
+                        gradientDuoTone={'tealToLime'}
+                        onClick={() => setShowModal(false)}
+                      >
+                        No, cancel
+                      </Button>
+                    </div>
+                  </div>
+                </ModalBody>
+              </Modal>
             </div>
           </>
         )}

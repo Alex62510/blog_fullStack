@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Textarea } from 'flowbite-react';
 import { Comment } from './Comment';
 import { CommentType } from '../types/types';
+import { data } from 'autoprefixer';
 
 type Props = {
   postId: string;
@@ -14,7 +15,8 @@ export const CommentSection = ({ postId }: Props) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<CommentType[]>([]);
   const [commentError, setCommentError] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -101,8 +103,22 @@ export const CommentSection = ({ postId }: Props) => {
   };
   const handleDelete = async (commentId: string) => {
     try {
-      setShowModal(true);
-    } catch (e) {}
+      if (!currentUser) {
+        navigate('/sign-in');
+        return;
+      }
+      const res = await fetch(`/api/comment/deleteComments/${commentId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setComments(comments.filter(comment => comment._id !== commentId));
+      } else {
+        setCommentError(data.message);
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    }
   };
 
   return (
