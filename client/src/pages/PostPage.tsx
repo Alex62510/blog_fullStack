@@ -5,13 +5,14 @@ import { PostType } from '../types/types';
 import { Button } from 'flowbite-react';
 import { CallToAction } from '../components/CallToAction';
 import { CommentSection } from '../components/CommentSection';
+import { PostCard } from '../components/PostCard';
 
 export const PostPage = () => {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [post, setPost] = useState<PostType | null>(null);
-  const [recentPosts, setPesentPosts] = useState(null);
+  const [recentPosts, setResentPosts] = useState<PostType[] | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -20,22 +21,45 @@ export const PostPage = () => {
         const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
         const data = await res.json();
         if (!res.ok) {
-          setError(true);
+          setError(data.message);
           setLoading(false);
           return;
         }
         if (res.ok) {
           setPost(data.posts[0]);
           setLoading(false);
-          setError(false);
+          setError('');
         }
       } catch (e) {
-        setError(true);
+        setError((e as Error).message);
         setLoading(false);
       }
     };
     fetchPost();
   }, [postSlug]);
+
+  useEffect(() => {
+    const fetchRecentPosts = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/post/getposts?limit=3`);
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.message);
+          setLoading(false);
+          return;
+        }
+        if (res.ok) {
+          setResentPosts(data.posts);
+          setLoading(false);
+          setError('');
+        }
+      } catch (e) {
+        setError((e as Error).message);
+      }
+    };
+    fetchRecentPosts();
+  }, []);
 
   if (loading)
     return (
@@ -80,10 +104,13 @@ export const PostPage = () => {
         <CallToAction />
       </div>
       {post && <CommentSection postId={post._id} />}
-      {error && 'Some error'}
+      {error && error}
       <div className={'flex flex-col justify-center items-center mb-5'}>
         <h1 className={'text-xl mt-5 dark:text-teal-100'}>Recent articles</h1>
-        <div className={''}></div>
+        <div className={''}>
+          {recentPosts &&
+            recentPosts.map(post => <PostCard key={post._id} post={post} />)}
+        </div>
       </div>
     </main>
   );
