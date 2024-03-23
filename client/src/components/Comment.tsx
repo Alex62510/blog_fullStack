@@ -15,7 +15,6 @@ type Props = {
 };
 export const Comment = ({ comment, onLike, onEdit, onDelete }: Props) => {
   const { currentUser } = useSelector((state: RootState) => state.user);
-
   const [user, setUser] = useState<UserType | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
