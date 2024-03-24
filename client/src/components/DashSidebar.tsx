@@ -5,6 +5,7 @@ import {
   HiArrowSmRight,
   HiDocumentText,
   HiOutlineUserGroup,
+  HiAnnotation,
 } from 'react-icons/hi';
 import { Link, useLocation } from 'react-router-dom';
 import { signOut } from '../redux/user/userSlice';
@@ -70,16 +71,28 @@ export const DashSidebar = () => {
             </Link>
           )}
           {currentUser && currentUser.isAdmin && (
-            <Link to={'/dashboard?tab=users'}>
-              <Sidebar.Item
-                active={tab === 'users'}
-                icon={HiOutlineUserGroup}
-                as={'div'}
-                className={'hover:bg-neutral-300 hover:shadow-lg hover:animate-pulse'}
-              >
-                Users
-              </Sidebar.Item>
-            </Link>
+            <>
+              <Link to={'/dashboard?tab=users'}>
+                <Sidebar.Item
+                  active={tab === 'users'}
+                  icon={HiOutlineUserGroup}
+                  as={'div'}
+                  className={'hover:bg-neutral-300 hover:shadow-lg hover:animate-pulse'}
+                >
+                  Users
+                </Sidebar.Item>
+              </Link>
+              <Link to={'/dashboard?tab=comments'}>
+                <Sidebar.Item
+                  active={tab === 'comments'}
+                  icon={HiAnnotation}
+                  as={'div'}
+                  className={'hover:bg-neutral-300 hover:shadow-lg hover:animate-pulse'}
+                >
+                  comments
+                </Sidebar.Item>
+              </Link>
+            </>
           )}
           <Sidebar.Item
             icon={HiArrowSmRight}
