@@ -22,7 +22,7 @@ export const PostCard = ({ post }: Props) => {
           }
         />
       </Link>
-      <div className={'p-3 gap-2 flex flex-col'}>
+      <div className={'p-3 gap-2 flex flex-col dark:text-teal-100'}>
         <p className={'text-lg font-semibold line-clamp-2'}>{post.title}</p>
         <span className={'italic text-sm'}>{post.category}</span>
         <Link
