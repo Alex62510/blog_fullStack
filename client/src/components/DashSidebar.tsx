@@ -50,7 +50,7 @@ export const DashSidebar = () => {
           {currentUser && currentUser.isAdmin && (
             <Link to={'/dashboard?tab=dash'}>
               <Sidebar.Item
-                active={tab === 'dash' || !tab}
+                active={tab === 'dash'}
                 className={'hover:bg-neutral-300 hover:shadow-lg hover:animate-pulse'}
                 icon={HiChartPie}
                 labelColor={'dark'}
