@@ -89,6 +89,15 @@ export const DashPost = () => {
         'scrollbar-thumb-teal-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'
       }
     >
+      {currentUser && (
+        <div className={'mb-3'}>
+          <Link to={'/create-post'}>
+            <Button type={'button'} gradientDuoTone={'greenToBlue'} className={'w-full'}>
+              Create a post
+            </Button>
+          </Link>
+        </div>
+      )}
       {currentUser && currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className={'shadow-md'}>
