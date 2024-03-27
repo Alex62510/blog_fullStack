@@ -1,6 +1,6 @@
-import React from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Button, Navbar, TextInput } from 'flowbite-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { AppDispatch, RootState } from '../redux/store';
@@ -10,9 +10,33 @@ import { toggleTheme } from '../redux/theme/themeSlice';
 
 export const Header = () => {
   const path = useLocation().pathname;
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const { theme } = useSelector((state: RootState) => state.theme);
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const searchQuery = urlParams.toString();
+    console.log(searchQuery);
+    navigate(`/search?${searchQuery}`);
+  };
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    } else {
+      setSearchTerm('');
+    }
+  }, [location.search]);
 
   return (
     <Navbar className={'border-b-2'}>
@@ -31,12 +55,14 @@ export const Header = () => {
         </span>
         Blog
       </Link>
-      <form className={'flex'}>
+      <form className={'flex'} onSubmit={handleSubmit}>
         <TextInput
           type={'text'}
           placeholder={'Search...'}
           rightIcon={AiOutlineSearch}
           className={'hidden lg:inline'}
+          value={searchTerm}
+          onChange={handleSearch}
         />
       </form>
       <Button className={'w-12 h-10  lg:hidden'} color="green" pill>
