@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { PostCard } from '../components/PostCard';
 import { PostType } from '../types/types';
 import { Spiner } from '../components/Spiner';
+import { MdOutlineExpandMore } from 'react-icons/md';
 
 export const Search = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -104,7 +105,9 @@ export const Search = () => {
       <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
           <div className="flex   items-center gap-2">
-            <label className="whitespace-nowrap font-semibold">Search Term:</label>
+            <label className="whitespace-nowrap font-semibold dark:text-teal-100">
+              Search Term:
+            </label>
             <TextInput
               placeholder="Search..."
               id="searchTerm"
@@ -114,14 +117,14 @@ export const Search = () => {
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="font-semibold">Sort:</label>
+            <label className="font-semibold dark:text-teal-100">Sort:</label>
             <Select onChange={handleChange} value={sidebarData.sort} id="sort">
               <option value="desc">Latest</option>
               <option value="asc">Oldest</option>
             </Select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="font-semibold">Category:</label>
+            <label className="font-semibold dark:text-teal-100">Category:</label>
             <Select onChange={handleChange} value={sidebarData.category} id="category">
               <option value="uncategorized">Uncategorized</option>
               <option value="reactjs">React.js</option>
@@ -151,12 +154,16 @@ export const Search = () => {
             posts &&
             posts.map(post => <PostCard key={post._id} post={post} />)}
           {showMore && (
-            <button
+            <Button
+              gradientDuoTone={'purpleToPink'}
               onClick={handleShowMore}
-              className="text-teal-500 text-lg hover:underline p-7 w-full"
+              className={
+                ' w-full self-center text-sm text-teal-950 bg-white hover:text-white hover:bg-white'
+              }
+              outline
             >
-              Show More
-            </button>
+              <MdOutlineExpandMore className={'w-5 h-5'} />
+            </Button>
           )}
         </div>
       </div>

@@ -63,13 +63,13 @@ export const Header = () => {
           value={searchTerm}
           onChange={handleSearch}
         />
+        <Button type={'submit'} className={'w-12 h-10  lg:hidden'} color="green" pill>
+          <AiOutlineSearch />
+        </Button>
       </form>
-      <Button className={'w-12 h-10  lg:hidden'} color="green" pill>
-        <AiOutlineSearch />
-      </Button>
       <div className={'flex gap-2 md:order-2 '}>
         <Button
-          className={'w-12 h-10 hidden sm:inline'}
+          className={'w-12 h-10 sm:inline'}
           color="green"
           pill
           onClick={() => dispatch(toggleTheme())}
@@ -86,7 +86,6 @@ export const Header = () => {
             </Button>
           </Link>
         )}
-
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
