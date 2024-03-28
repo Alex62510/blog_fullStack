@@ -9,6 +9,18 @@
     "lint": "eslint --fix",
     "preview": "vite preview"
   },
+  "lint-staged": {
+    "**/*.{js,ts,jsx,tsx}": [
+      "npm run lint-fix",
+      "prettier --write"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "firebase": "^10.8.0",
