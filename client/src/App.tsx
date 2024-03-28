@@ -15,7 +15,7 @@ import { PostPage } from './pages/PostPage';
 import ScrollToTop from './components/ScrollToTop';
 import { Search } from './pages/Search';
 
-export const App = () => {
+const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -40,3 +40,4 @@ export const App = () => {
     </BrowserRouter>
   );
 };
+export default App;
