@@ -4,7 +4,6 @@ import { CallToAction } from '../components/CallToAction';
 import { useEffect, useState } from 'react';
 import { PostType } from '../types/types';
 import { DashSidebar } from '../components/DashSidebar';
-import { current } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 type InitialStateType = {
   theme: 'light' | 'dark';
 };
-const initialState = {
+const initialState: InitialStateType = {
   theme: 'light',
 };
 
