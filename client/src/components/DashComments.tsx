@@ -5,7 +5,6 @@ import { Button, Modal, ModalBody, ModalHeader, Table } from 'flowbite-react';
 import { CommentType } from '../types/types';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { MdOutlineExpandMore } from 'react-icons/md';
-import { Link } from 'react-router-dom';
 
 export const DashComments = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -34,7 +33,7 @@ export const DashComments = () => {
     if (currentUser && currentUser.isAdmin) {
       fetchComments();
     }
-  }, [currentUser?._id]);
+  }, [currentUser, currentUser?._id]);
   console.log(showMore);
   const handleShowMore = async () => {
     const startIndex = comments.length;

@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Textarea } from 'flowbite-react';
 import { Comment } from './Comment';
 import { CommentType } from '../types/types';
-import { data } from 'autoprefixer';
 
 type Props = {
   postId: string;
@@ -15,7 +14,6 @@ export const CommentSection = ({ postId }: Props) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState<CommentType[]>([]);
   const [commentError, setCommentError] = useState('');
-  const [deleteStatus, setDeleteStatus] = useState(false);
 
   const navigate = useNavigate();
 
