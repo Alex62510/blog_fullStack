@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Button, Select, TextInput } from 'flowbite-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PostCard } from '../components/PostCard';
@@ -52,7 +52,7 @@ export const Search = () => {
       }
     };
     fetchPosts();
-  }, [location.search]);
+  }, [location.search, sidebarData]);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     if (e.target.id === 'searchTerm') {

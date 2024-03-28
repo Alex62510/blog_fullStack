@@ -53,6 +53,7 @@ export const DashProfile = () => {
     if (imageFile) {
       uploadImage(imageFile);
     }
+    // eslint-disable-next-line
   }, [imageFile]);
 
   const uploadImage = async (imageFile: File) => {
