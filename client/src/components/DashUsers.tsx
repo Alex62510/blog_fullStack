@@ -34,7 +34,7 @@ export const DashUsers = () => {
     if (currentUser && currentUser.isAdmin) {
       fetchUsers();
     }
-  }, [currentUser?._id]);
+  }, [currentUser, currentUser?._id]);
   console.log(showMore);
   const handleShowMore = async () => {
     const startIndex = users.length;
