@@ -8,7 +8,9 @@ export const CallToAction = () => {
       }
     >
       <div className={'flex-1 flex flex-col justify-center'}>
-        <h2 className={'text-2xl'}>Want learn more about TypeScript?</h2>
+        <h2 className={'text-2xl dark:text-teal-100'}>
+          Want learn more about TypeScript?
+        </h2>
         <p className={'text-gray-500 my-2'}>Checkout these resources on my page</p>
         <Button
           gradientDuoTone={'purpleToBlue'}
