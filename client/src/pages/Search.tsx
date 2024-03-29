@@ -52,7 +52,7 @@ export const Search = () => {
       }
     };
     fetchPosts();
-  }, [location.search, sidebarData]);
+  }, [location.search]);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     if (e.target.id === 'searchTerm') {

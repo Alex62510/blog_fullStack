@@ -34,7 +34,7 @@ export const DashPost = () => {
     if (currentUser && currentUser.isAdmin) {
       fetchPosts();
     }
-  }, [currentUser, currentUser?._id]);
+  }, [currentUser?._id]);
   console.log(showMore);
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
