@@ -44,7 +44,7 @@ export default function Home() {
             View all posts
           </Link>
         </div>
-        <div className="p-3 bg-amber-100 dark:bg-slate-700 mr-5 rounded-tl-3xl rounded-br-3xl">
+        <div className=" m-3 lg:mr-7 md:mr-7 bg-amber-100 dark:bg-slate-700  rounded-tl-3xl rounded-br-3xl">
           <CallToAction />
         </div>
 
