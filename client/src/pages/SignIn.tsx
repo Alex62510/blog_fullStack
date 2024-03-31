@@ -116,6 +116,27 @@ export const SignIn = () => {
               Sign Up
             </Link>
           </div>
+          <div className={'text-blue-800 dark:text-teal-100 pt-7'}>
+            For test in admin mode you can use:
+            <div className={'pt-1'}>
+              email:
+              <span
+                className={'text-green-500 dark:text-teal-500 animate-pulse transition'}
+              >
+                {' '}
+                admin@gmail.com
+              </span>
+            </div>
+            <div>
+              password:
+              <span
+                className={' text-green-500 dark:text-teal-500 animate-pulse transition'}
+              >
+                {' '}
+                admin
+              </span>
+            </div>
+          </div>
           {error && (
             <Alert color={'failure'} className={'mt-5'}>
               {typeof error === 'string'
